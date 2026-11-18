@@ -1,56 +1,76 @@
-# Welcome to your Expo app 👋
+# ASMH
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+ASMH é um aplicativo pessoal de produtividade para transformar tarefas diárias em pontos e pontos em recompensas. Ele foi pensado para uso individual, sem autenticação ou backend.
 
-## Get started
+## Funcionalidades
 
-1. Install dependencies
+- Saldo diário de pontos, reiniciado automaticamente a cada novo dia.
+- Cadastro de tarefas com nome, dificuldade, cor e valor em pontos.
+- Conclusão de tarefas pelo checkbox, com confetes na tela.
+- Tarefas concluídas organizadas no fim da lista.
+- Mensagem motivacional quando todas as tarefas do dia são concluídas.
+- Cadastro de produtos/recompensas com custo em pontos.
+- Resgate de produtos com confirmação e validação de saldo.
+- Exclusão confirmada de tarefas e produtos.
+- Persistência local de tarefas, produtos, saldo e histórico de movimentações.
 
-   ```bash
-   npm install
-   ```
+## Tecnologias
 
-2. Start the app
+- [Expo SDK 58](https://docs.expo.dev/)
+- React Native e TypeScript
+- Expo Router
+- NativeWind (Tailwind CSS para React Native)
+- AsyncStorage
 
-   ```bash
-   npx expo start
-   ```
+## Como executar
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Pré-requisito: Node.js 22.13 ou superior.
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+Para limpar o cache do Metro, especialmente após mudanças no NativeWind:
 
-### Other setup steps
+```bash
+npx expo start --clear
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+No terminal do Expo, use `a` para Android, `i` para iOS (no macOS) ou `w` para abrir no navegador.
 
-## Learn more
+## Estrutura principal
 
-To learn more about developing your project with Expo, look at the following resources:
+```text
+src/
+├── app/
+│   ├── _layout.tsx              # Provider global e configuração das rotas
+│   └── index.tsx                # Alternância entre as seções principais
+├── components/
+│   └── ConfettiBurst.tsx        # Efeito visual ao concluir uma tarefa
+├── providers/
+│   └── ProductivityProvider.tsx # Estado, regras de negócio e persistência
+├── sections/
+│   ├── MeusPontos.tsx           # Saldo e tarefas diárias
+│   └── Produtos.tsx             # Produtos e resgates
+└── types/
+    └── productivity.ts          # Tipos de tarefas, produtos e movimentações
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Regras de pontuação
 
-## Join the community
+- Cada tarefa concluída adiciona seus pontos ao saldo do dia.
+- Ao desmarcar uma tarefa, seus pontos são removidos, sem permitir saldo negativo.
+- Produtos só podem ser resgatados quando há saldo suficiente.
+- O saldo é zerado no início de cada dia; tarefas, produtos e histórico permanecem armazenados.
 
-Join our community of developers creating universal apps.
+## Persistência
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Os dados são guardados localmente com `@react-native-async-storage/async-storage`, na chave `@asmh/productivity-data`. Nenhum dado é enviado para servidores externos.
+
+## Verificações
+
+```bash
+npx expo lint
+npx tsc --noEmit
+```
